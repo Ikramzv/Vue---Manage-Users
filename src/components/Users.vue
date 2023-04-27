@@ -15,7 +15,7 @@ export default defineComponent({
     deleteUser(id: UserType["id"], e: Event) {
       const target = e.currentTarget as HTMLLIElement;
       target.classList.add("deleted");
-      setTimeout(this.remove, 800, id);
+      setTimeout(this.remove, 1100, id);
     },
     ...mapActions(useUsersStore, ["remove"]),
   },
@@ -54,42 +54,5 @@ ul {
   padding: 16px 12px 4px;
   background-color: white;
   list-style-type: none;
-}
-
-ul li {
-  padding: 12px 8px;
-  border-radius: 12px;
-  background-color: white;
-  border: 2px solid black;
-  transition: 200ms ease;
-  cursor: pointer;
-  margin-bottom: 12px;
-}
-
-ul li:active {
-  scale: 0.9;
-}
-
-ul li:is(:hover) {
-  background-color: black;
-  color: white;
-}
-
-ul li.deleted {
-  animation: deleted 1s ease forwards;
-}
-
-@keyframes deleted {
-  50% {
-    transform: translateX(120%);
-  }
-
-  100% {
-    transform: translateX(120%);
-    height: 0px;
-    padding: 0px;
-    margin: 0px;
-    border: none;
-  }
 }
 </style>
