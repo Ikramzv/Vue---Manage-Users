@@ -1,12 +1,14 @@
 <script setup>
 import { storeToRefs } from "pinia";
-import { ref, watchEffect } from "vue";
+import { reactive, ref, watchEffect } from "vue";
 import useUsersStore from "../store/data";
 import useModalStore from "../store/modal";
 
-const surname = ref("");
-const name = ref("");
-const id = ref(0);
+const inputs = reactive({
+  surname: "",
+  name: "",
+  id: 0,
+});
 
 const store = useUsersStore();
 const { data: users } = storeToRefs(store);
@@ -20,16 +22,16 @@ const first_input = ref();
 
 const isExisting = () =>
   users.value.some(
-    (user) => user.id === parseFloat(id.value) || user.name === name.value
+    (user) => user.id === parseFloat(inputs.id) || user.name === inputs.name
   );
 
-const isEmpty = () => [surname, name, id].some((v) => v.value === "");
+const isEmpty = () => Object.values(inputs).some((v) => v === "");
 
 function submit(e) {
   if (isEmpty()) return alert("Not leave empty");
   if (isExisting()) return alert("Name or Id already exists");
 
-  const user = { surname: surname.value, name: name.value, id: id.value };
+  const user = { ...inputs };
   add(user); // add user to the state
   animate(e.target);
 
@@ -53,9 +55,9 @@ function animate(el) {
 }
 
 function reset() {
-  surname.value = "";
-  name.value = "";
-  id.value = 0;
+  inputs.id = 0;
+  inputs.surname = "";
+  inputs.name = "";
 }
 
 function check(e) {
@@ -66,7 +68,7 @@ function check(e) {
 
   if (e.target.value > 999) e.target.value = 999;
 
-  id.value = e.target.value;
+  inputs.id = e.target.value;
 }
 
 watchEffect((cleanUp) => {
@@ -93,15 +95,20 @@ watchEffect((cleanUp) => {
       <hr />
       <form @submit.prevent="submit">
         <label for="name">Name</label>
-        <input ref="first_input" autocomplete="off" id="name" v-model="name" />
+        <input
+          ref="first_input"
+          autocomplete="off"
+          id="name"
+          v-model="inputs.name"
+        />
         <label for="surname">Surname</label>
-        <input autocomplete="off" id="surname" v-model="surname" />
+        <input autocomplete="off" id="surname" v-model="inputs.surname" />
         <label for="ID">ID</label>
         <input
           type="number"
           min="0"
           max="999"
-          :value="id"
+          :value="inputs.id"
           @input="check"
           autocomplete="off"
           id="ID"
