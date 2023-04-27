@@ -1,17 +1,20 @@
-<script>
+<script lang="ts">
 import { mapActions, mapState } from "pinia";
+import { defineComponent } from "vue";
+import type { User as UserType } from "../store/data";
 import useUsersStore from "../store/data";
 import User from "./User.vue";
 
-export default {
+export default defineComponent({
   computed: {
     ...mapState(useUsersStore, {
       users: "data",
     }),
   },
   methods: {
-    deleteUser(id, e) {
-      e.currentTarget.classList.add("deleted");
+    deleteUser(id: UserType["id"], e: Event) {
+      const target = e.currentTarget as HTMLLIElement;
+      target.classList.add("deleted");
       setTimeout(this.remove, 800, id);
     },
     ...mapActions(useUsersStore, ["remove"]),
@@ -19,7 +22,7 @@ export default {
   components: {
     User,
   },
-};
+});
 </script>
 
 <template>
@@ -73,7 +76,7 @@ ul li:is(:hover) {
 }
 
 ul li.deleted {
-  animation: deleted 800ms ease forwards;
+  animation: deleted 1s ease forwards;
 }
 
 @keyframes deleted {

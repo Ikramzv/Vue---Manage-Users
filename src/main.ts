@@ -1,3 +1,5 @@
+/// <reference path="./declarations/modules.d.ts" />
+
 import { createPinia } from "pinia";
 import { createApp } from "vue";
 import App from "./App.vue";

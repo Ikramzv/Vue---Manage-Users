@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { reactive, ref, watchEffect } from "vue";
 import useUsersStore from "../store/data";
@@ -22,25 +22,25 @@ const first_input = ref();
 
 const isExisting = () =>
   users.value.some(
-    (user) => user.id === parseFloat(inputs.id) || user.name === inputs.name
+    (user) => user.id === inputs.id || user.name === inputs.name
   );
 
 const isEmpty = () => Object.values(inputs).some((v) => v === "");
 
-function submit(e) {
+function submit(e: Event) {
   if (isEmpty()) return alert("Not leave empty");
   if (isExisting()) return alert("Name or Id already exists");
 
   const user = { ...inputs };
   add(user); // add user to the state
-  animate(e.target);
+  animate(e.target as HTMLElement);
 
   reset();
 
   first_input.value.focus();
 }
 
-function animate(el) {
+function animate(el: HTMLElement) {
   el.animate(
     [
       {
@@ -60,15 +60,16 @@ function reset() {
   inputs.name = "";
 }
 
-function check(e) {
-  if (e.target.value.length === 0) e.target.value = 0;
+function check(e: Event) {
+  const target = e.target as HTMLInputElement;
+  if (target.value.length === 0) target.valueAsNumber = 0;
 
-  if (e.target.value.length > 1 && e.target.value.startsWith(0))
-    e.target.value = e.target.value[1];
+  if (target.value.length > 1 && target.value.startsWith("0"))
+    target.value = target.value[1];
 
-  if (e.target.value > 999) e.target.value = 999;
+  if (target.valueAsNumber > 999) target.valueAsNumber = 999;
 
-  inputs.id = e.target.value;
+  inputs.id = target.valueAsNumber;
 }
 
 watchEffect((cleanUp) => {
@@ -76,8 +77,9 @@ watchEffect((cleanUp) => {
 
   window.addEventListener("click", onWindowClick);
 
-  function onWindowClick(e) {
-    if (e.target.matches(".modal-inner , .modal-inner *")) return;
+  function onWindowClick(e: Event) {
+    const target = e.target as HTMLElement;
+    if (target.matches(".modal-inner , .modal-inner *")) return;
 
     setClose(); // Close the Modal
   }

@@ -9,11 +9,15 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/node": "^18.16.1",
+    "@types/vue": "^2.0.0",
     "pinia": "^2.0.35",
+    "typescript": "^5.0.4",
     "vue": "^3.2.45"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/tsconfig": "^0.3.2",
     "vite": "^4.1.0"
   }
 }

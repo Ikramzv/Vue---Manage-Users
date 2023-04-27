@@ -1,5 +1,11 @@
 import { defineStore } from "pinia";
 
+export interface User {
+  id: number
+  name: string
+  surname: string
+}
+
 const useUsersStore = defineStore("users", {
   state: () => ({
     data: [
@@ -26,10 +32,10 @@ const useUsersStore = defineStore("users", {
     ],
   }),
   actions: {
-    add(user) {
+    add(user: User) {
       this.$state.data = [...this.$state.data, user];
     },
-    remove(id) {
+    remove(id: User["id"]) {
       this.$state.data = this.$state.data.filter((user) => user.id !== id);
     },
   },
